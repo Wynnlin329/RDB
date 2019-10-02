@@ -17,4 +17,4 @@ select job from emp;　#出現14筆資料之job
 select distinct job from emp;　#只出現不重複值
 (=select job from emp group by job;)
 select job from emp limit 5;　#顯示第1~5筆
-select job from emp limit 5,5;　#顯示第6~10筆
+select job from emp limit 5, 5;　#顯示第6~10筆
