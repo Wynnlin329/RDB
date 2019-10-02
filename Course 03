@@ -1,0 +1,4 @@
+select * from emp;
+select empno, ename, job from emp;
+select EMPNO, ename, job from emp;　#表頭大小寫依輸入決定
+desc emp;
