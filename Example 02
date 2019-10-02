@@ -1,0 +1,13 @@
+2.3
+show databases;
+
+2.4
+create database mydb;
+
+2.5
+use mydb (select database( );)　#只會選擇一個資料庫
+source C:\ ... \mysql_demobld.sql
+
+2.6
+show tables;
+desc customer;
