@@ -1,41 +1,40 @@
 9.1
 insert into my_emp
-  values(1,"Patel","Ralph","rpatel",795);
+  values(1, "Patel", "Ralph", "rpatel", 795);
 
 9.2
 desc my_emp;
-insert into my_emp(ID,LAST_NAME,FIRST_NAME,USERID,SALARY)
-  values(2,"Dancs","Betty","bdancs",860);
+insert into my_emp(ID, LAST_NAME, FIRST_NAME, USERID, SALARY)
+  values(2, "Dancs", "Betty", "bdancs", 860);
 
 9.3
 insert into my_emp
-  values(3,"Biri","Ben","bbiri",1100), (4, "Newman", "Chad", "cnewman", 750);
+  values(3, "Biri", "Ben", "bbiri", 1100), (4, "Newman", "Chad", "cnewman", 750);
 
 9.4
-mysql> update my_emp
-         -> set LAST_NAME="Drexler" where ID=3;
+update my_emp
+  set LAST_NAME="Drexler" where ID=3;
 
 9.5
-mysql> update my_emp
-         -> set SALARY=1000 where SALARY<900;
+update my_emp
+  set SALARY=1000 where SALARY<900;
 
 9.6
-mysql> show table status (from mydb) like "my_emp";
-#資料筆數、最後修改時間 ...
+show table status [from mydb] like "my_emp";　#資料筆數、最後修改時間...
 
 9.7
-mysql> delete from my_emp
-         -> where FIRST_NAME="Betty";
+delete from my_emp
+  where FIRST_NAME="Betty";
 
 9.8
-mysql> set autocommit=0; #安全交易開始
+set autocommit=0;　#安全交易開始
 
-mysql> update my_emp
-         -> set salary=salary*1.1; #未宣告 where 則為全數調整
-mysql> savepoint T1; #不可以數字開頭
+update my_emp
+  set salary=salary*1.1;　#未宣告where則為全數調整
+  savepoint T1;　#不以數字開頭
 
-mysql> delete from my_emp;
-mysql> select * from my_emp; #不同於 select，無星號
-mysql> rollback to savepoint T1; #rollback 是取消所有交易內容
+delete from my_emp;　#不同於select，無星號
+select * from my_emp;
+rollback to savepoint T1;　#rollback取消所有交易內容
 
-mysql> set autocommit=1; #安全交易結束
+set autocommit=1;　#安全交易結束
