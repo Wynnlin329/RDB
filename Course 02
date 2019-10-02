@@ -2,3 +2,6 @@ show databases;
 use mydb
 select database();　#只會選一個資料庫，單數不加s
 
+show tables:
+select * from dept; 
+desc employee;
