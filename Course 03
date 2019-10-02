@@ -1,4 +1,20 @@
+#基本資料查詢
+select 10;　#常值:表頭、內容都是10
 select * from emp;
-select empno, ename, job from emp;
-select EMPNO, ename, job from emp;　#表頭大小寫依輸入決定
-desc emp;
+select empno, ename, sal from emp;
+select EMPNO, ename, sal from emp;　#表頭大小寫依輸入決定
+select empno, ename, sal+1000 from emp;
+select empno, ename, sal+comm from emp;　#可相加，但若出現空值則顯示null
+
+#欄位別名
+select empno EMP_NUMBER from emp;
+select empno as EMP_NUMBER from emp;
+select empno "員工編號" from emp;
+select empno "emp number#" from emp;
+
+#設定條件(1)
+select job from emp;　#出現14筆資料之job
+select distinct job from emp;　#只出現不重複值
+(=select job from emp group by job;)
+select job from emp limit 5;　#顯示第1~5筆
+select job from emp limit 5,5;　#顯示第6~10筆
