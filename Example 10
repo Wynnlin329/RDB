@@ -38,9 +38,9 @@ alter table EMPLOYEE
 
 10.10
 alter table EMPLOYEE
-  add (constraint NAME) primary key(ID);　#constraint及命名可省略，但PK、UNI後必宣告變數
+  add [constraint NAME] primary key(ID);　#constraint及命名可省略，但PK、UNI後必宣告變數
 
 10.11
 alter table EMPLOYEE
-  add (constraint NAME) foreign key(DEPT_ID) references dept(deptno);　#constraint及命名可省略，但FK後必宣告參數及參照表(欄)
-#相依性或空值設定: on+[delete/update] [cascade/set null]
+  add [constraint NAME] foreign key(DEPT_ID) references dept(deptno);　#constraint及命名可省略，但FK後必宣告參數及參照表(欄)
+#相依性或空值設定: on [delete/update] [cascade/set null]
