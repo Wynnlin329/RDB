@@ -1,0 +1,14 @@
+3.1
+select * from dept;
+
+3.2
+select empno "employee number", ename name, job, hiredate "hire date" from emp;
+
+3.3
+select distinct job from emp;　#重複資料只顯示一次
+
+3.4
+select empno "Emp#", ename Employee, Job, hiredate "Hire Date" from emp;
+
+3.5
+select concat(ename, " ,", job) "Employee and Title" from emp;　#以逗號及空白做區隔
