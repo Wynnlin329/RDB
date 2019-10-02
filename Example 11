@@ -1,0 +1,33 @@
+11.1
+create view EMP_VU as
+  select ename EMPLOYEE, ename, deptno from emp;
+
+11.2
+select * from EMP_VU;
+
+11.3
+select EMPLOYEE, deptno from EMP_VU;　#基底表格為emp，故改成ename一樣查得到
+(=select ename, deptno from EMP_VU;)
+#但若於create宣告EMPLOYEE欄名，這就不行
+
+11.4
+create view DEPT20 as
+  select empno EMPLOYEE_ID, ename EMPLOYEE, deptno DEPARTMENT_ID from emp
+  where deptno=20 with check option;
+
+11.5
+desc DEPT20;
+select * from DEPT20;
+
+11.6
+update DEPT20
+  set DEPARTMENT_ID=30
+  where EMPLOYEE="Smith";
+#ERROR 1369 (HY000): CHECK OPTION failed 'mydb.dept20'
+
+11.7
+create view SALARY2_VU as
+  select a.ename EMPLOYEE, a.deptno DEPARTMENT, a.sal SALARY, b.grade
+  1. from emp a, salgrade b where a.sal between b.losal and b.hisal;
+  2. from emp a join salgrade b on a.sal between b.losal and b.hisal;
+ 
