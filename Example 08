@@ -15,56 +15,49 @@ select empno, ename from emp where deptno in
   (select deptno from emp where ename like "%T%");
 
 8.5
-1.select ename, deptno, job from emp where deptno=
+1. select ename, deptno, job from emp where deptno=
   (select deptno from dept where loc="Dallas");　#無需宣告表格別名: 子查詢互不干涉
-2.select a.ename, a.deptno, a.job
-  from emp a, dept b using (deptno) where b.loc="Dallas";
-#後者為 join 寫法，前者無需宣告表格別名：子查詢互不干涉
+2. select a.ename, a.deptno, a.job
+  from emp a, dept b using (deptno) where b.loc="Dallas";　#join寫法
 
 8.6
-mysql> select ename, sal from emp where mgr=
-         -> (select empno from emp where ename="King");
-mysql> select a.ename, a.sal
-         -> from emp a join emp b on (a.mgr=b.empno)
-         -> where b.ename="King";
-#後者為 join 寫法，需從次表中找尋名為 King 之員工碼做結合
+1. select ename, sal from emp where mgr=
+  (select empno from emp where ename="King");
+2. select a.ename, a.sal
+  from emp a join emp b on (a.mgr=b.empno)　#a.mgr=b.empno，就是查b表的FK聯結
+  where b.ename="King";　#以King之員工碼做查詢、結合
 
 8.7
-mysql> select deptno, ename, job from emp where deptno=
-         -> (select deptno from dept where dname="Sales");
-mysql> select a.deptno, a.ename, a.job
-         -> from emp a join dept b using (deptno)
-         -> where b.dname="Sales";
+1. select deptno, ename, job from emp where deptno=
+  (select deptno from dept where dname="Sales");
+2. select a.deptno, a.ename, a.job
+  from emp a join dept b using (deptno)
+  where b.dname="Sales";
 
 8.8
-mysql> select empno, ename, sal from emp where sal>
-         -> (select avg(sal) from emp) and deptno in
-         -> (select deptno from emp where ename like "%T%");
+select empno, ename, sal from emp where sal>
+  (select avg(sal) from emp) and deptno in
+  (select deptno from emp where ename like "%T%");　#多重子查詢，若結構相似亦可合併(參考8.9)
 
 8.9
-mysql> select ename, deptno, sal from emp a where (deptno, sal) in
-         -> (select deptno, sal from emp b
-         -> where comm>0 and a.ename != b.ename);
-#關聯+多值子查詢：sal、deptno 需相同且不為自己 (加入 != 條件排除)
+select ename, deptno, sal from emp a where (deptno, sal) in
+  (select deptno, sal from emp b
+  where comm>0 and a.ename != b.ename);　#多值+關聯子查詢: emp a/b，值需相同且不為自己(加入!=條件排除)
 
 8.10
-mysql> select ename, deptno, sal from emp a where (sal, ifnull(comm, 0)) in
-         -> (select sal, ifnull(comm, 0) from emp b where a.ename != b.ename) and deptno in
-         -> (select deptno from dept where loc="Dallas");
-#這是先篩選 sal、comm 相同且不為自己者，再篩選部門地點
-mysql> select ename, deptno, sal from emp a where (sal ifnull(comm, 0) in
-         -> (select sal, ifnull(comm, 0) from emp b join dept c using (deptno)
-         -> where c.loc="Dallas" and a.ename != b.ename);
-#將地點、姓名寫入 sal、comm 判定之做法，bc 表均不可寫於子查詢外
+1. select ename, deptno, sal from emp a where (sal, ifnull(comm, 0)) in
+  (select sal, ifnull(comm, 0) from emp b where a.ename != b.ename) and deptno in　#多值+關聯子查詢: emp a/b，值需相同且不為自己(加入!=條件排除)
+  (select deptno from dept where loc="Dallas");
+2. select ename, deptno, sal from emp a where (sal, ifnull(comm, 0)) in
+  (select sal, ifnull(comm, 0) from emp b join dept c using (deptno)
+  where c.loc="Dallas" and a.ename != b.ename);　#將地點、姓名寫入sal、comm判定之做法，bc表均不可寫於子查詢外
 
 8.11
-mysql> select ename, hiredate, sal from emp where (sal, ifnull(comm,0)) =
-         -> (select sal, ifnull(comm,0) from emp where ename="Scott")
-         -> and ename != "Scott";
-#null=null 判定仍為 null，套入 ifnull 函式將內、外各轉為 0
+select ename, hiredate, sal from emp where (sal, ifnull(comm, 0)) in
+  (select sal, ifnull(comm,0) from emp where ename="Scott" and ename != "Scott");
 
 8.12
-mysql> select ename, hiredate, sal from emp
-1.      -> where sal>all (select sal from emp where job="Clerk")
-2.      -> where sal>(select max(sal) from emp where job="Clerk")
-         -> order by sal desc;
+select ename, hiredate, sal from emp
+  1. where sal>all (select sal from emp where job="Clerk")
+  2. where sal>(select max(sal) from emp where job="Clerk")
+  order by sal desc;
