@@ -3,6 +3,8 @@ select ename, job from emp where sal>=2000;
 select ename, job from emp where job="analyst";　#字串加上引號，可用=、!=比對
 select ename, job from emp where hiredate<"1981-10-4";　#日期加上引號，適用於比較運算
 
+--------------------------------------------------------------------------------
+
 #結合邏輯運算
 select ename, job from emp where sal>=1000 and job="clerk";
 select ename, job from emp where hiredate<"1981-10-4" or job="analyst";
@@ -19,6 +21,8 @@ select ename, job from emp where ename like "_C%";　#名字第二個字母為C
 select ename, job from emp where ename like "%A%E%";　#名字包含A和E，但A在E之前面
 select ename, job from emp where mgr is not null;　#(null=null): null
 
+--------------------------------------------------------------------------------
+
 #case運算
 select ename, job,　#逗號沒寫: ERROR
   case job　                               case　#以case開頭,end結尾
@@ -27,6 +31,8 @@ select ename, job,　#逗號沒寫: ERROR
   else sal　                               else "C"　#sal沒寫: 其餘值為null
   end sal　          　　　　　　　　　　　  end sal　#sal沒寫: 欄位名稱為整串
   from emp;　　　　　　　　　　　　　　　　　 from emp;
+
+--------------------------------------------------------------------------------
 
 #資料排序
 select ename, job from emp where sal>2200 order by ename [asc];　#依序首字母升冪排序
