@@ -10,5 +10,5 @@ select distinct job from emp;　#重複資料只顯示一次
 Q3.4: 呈Q3.2，並將資料表頭重新命名為: Emp#, Employee, Job, Hire Date
 select empno "Emp#", ename Employee, Job, hiredate "Hire Date" from emp;
 
-Q3.5: 建立一個查詢將姓名(name)及職稱(job)串接為一個資料項 (資料中間利用一個空白和逗號做區隔)，並將表頭重新命名為 Employee and Title
+Q3.5: 建立一個查詢將姓名(name)及職稱(job)串接為一個資料項(資料中間利用一個空白和逗號做區隔)，並將表頭重新命名為 Employee and Title
 select concat(ename, " ,", job) "Employee and Title" from emp;　#以逗號及空白做區隔
