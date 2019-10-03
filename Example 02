@@ -1,13 +1,13 @@
-2.3
+Q2.3 查看目前Server中現有的資料庫
 show databases;
 
-2.4
+Q2.4 建立一示範資料庫
 create database mydb;
 
-2.5
+Q2.5 執行Script File以建立示範資料庫中的資料表
 use mydb (select database( );)　#只會選擇一個資料庫
 source C:\ ... \mysql_demobld.sql
 
-2.6
+Q2.6 查看示範資料庫中的資料表
 show tables;
 desc customer;
