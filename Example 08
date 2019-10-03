@@ -1,62 +1,62 @@
-8.1
+Q8.1: 顯示和Blake同部門的所有員工之姓名和進公司日期
 select ename, hiredate from emp where deptno=
   (select deptno from emp where ename="Blake");
 
-8.2
+Q8.2: 顯示所有在Blake之後進公司的員工之姓名和進公司日期
 select ename, hiredate from emp where hiredate>
   (select hiredate from emp where ename="Blake");
 
-8.3
+Q8.3: 顯示薪資比公司平均薪資高的所有員工之編號、姓名和薪資，並依薪資由高到低排列
 select empno, ename, sal from emp where sal>
   (select avg(sal) from emp) order by sal desc;
 
-8.4
+Q8.4: 顯示和姓名中包含T的人在相同部門工作的所有員工之編號和姓名
 select empno, ename from emp where deptno in
-  (select deptno from emp where ename like "%T%");
+  (select deptno from emp where ename like "%T%") [and not ename like "%T%"];　#若要排除姓名包含T者於查詢結果
 
-8.5
+Q8.5: 顯示在Dallas工作的所有員工之姓名、部門編號和職稱
 1. select ename, deptno, job from emp where deptno=
   (select deptno from dept where loc="Dallas");　#無需宣告表格別名: 子查詢互不干涉
 2. select a.ename, a.deptno, a.job
   from emp a, dept b using (deptno) where b.loc="Dallas";　#join寫法
 
-8.6
+Q8.6: 顯示直屬於King的員工之姓名和薪資
 1. select ename, sal from emp where mgr=
   (select empno from emp where ename="King");
 2. select a.ename, a.sal
-  from emp a join emp b on (a.mgr=b.empno)　#a.mgr=b.empno，就是查b表的FK聯結
-  where b.ename="King";　#以King之員工碼做查詢、結合
+  from emp a join emp b on (a.mgr=b.empno) where b.ename="King";　#查b表的FK聯結，並以King之員工碼做查詢、結合
 
-8.7
+Q8.7: 顯示銷售部門Sales所有員工之部門編號、姓名和職稱
 1. select deptno, ename, job from emp where deptno=
   (select deptno from dept where dname="Sales");
 2. select a.deptno, a.ename, a.job
-  from emp a join dept b using (deptno)
-  where b.dname="Sales";
+  from emp a join dept b using (deptno) where b.dname="Sales";
 
-8.8
+Q8.8: 顯示薪資比公司平均薪資還要高，且和名字中有T的人在相同部門上班的所有員工之編號、姓名和薪資
 select empno, ename, sal from emp where sal>
   (select avg(sal) from emp) and deptno in
-  (select deptno from emp where ename like "%T%");　#多重子查詢，若結構相似亦可合併(參考8.9)
+  (select deptno from emp where ename like "%T%");　
 
-8.9
+Q8.9: 顯示和有賺取佣金的員工之部門編號和薪資都相同的員工之姓名、部門編號和薪資
 select ename, deptno, sal from emp a where (deptno, sal) in
-  (select deptno, sal from emp b
-  where comm>0 and a.ename != b.ename);　#多值+關聯子查詢: emp a/b，值需相同且不為自己(加入!=條件排除)
+  (select deptno, sal from emp b where comm>0
+  and a.ename != b.ename);　#關聯子查詢: emp a/b，且不為自己(於查詢內加入!=排除)
 
-8.10
+Q8.10: 顯示和在Dallas工作的員工之薪資和佣金都相同的員工之姓名、部門編號和薪資
 1. select ename, deptno, sal from emp a where (sal, ifnull(comm, 0)) in
-  (select sal, ifnull(comm, 0) from emp b where a.ename != b.ename) and deptno in　#多值+關聯子查詢: emp a/b，值需相同且不為自己(加入!=條件排除)
+  (select sal, ifnull(comm, 0) from emp b where a.ename != b.ename) and deptno in　#關聯子查詢: emp a/b，且不為自己(加入!=條件排除)
   (select deptno from dept where loc="Dallas");
 2. select ename, deptno, sal from emp a where (sal, ifnull(comm, 0)) in
   (select sal, ifnull(comm, 0) from emp b join dept c using (deptno)
-  where c.loc="Dallas" and a.ename != b.ename);　#將地點、姓名寫入sal、comm判定之做法，bc表均不可寫於子查詢外
+  where c.loc="Dallas" and a.ename != b.ename);　#a.ename != b.ename之條件亦可放在最後
+#join: 將地點、姓名寫入sal、comm判定，b、c表均不可寫於子查詢外
 
-8.11
+Q8.11: 顯示薪資和佣金都和Scott相同的所有員工之姓名、進公司日期和薪資(不要在結果中顯示Scott之資料)
 select ename, hiredate, sal from emp where (sal, ifnull(comm, 0)) in
-  (select sal, ifnull(comm,0) from emp where ename="Scott" and ename != "Scott");
+  (select sal, ifnull(comm,0) from emp where ename="Scott")　#in適用於回傳結果大於1筆或1個欄位
+  and ename != "Scott";　#若寫於子查詢內，則回傳結果為Empty set
 
-8.12
+Q8.12: 顯示薪資比所有直稱是Clerks還高的員工之姓名、進公司日期和薪資，並將結果依薪資由高志低顯示
 select ename, hiredate, sal from emp
   1. where sal>all (select sal from emp where job="Clerk")
   2. where sal>(select max(sal) from emp where job="Clerk")
