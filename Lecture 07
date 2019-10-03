@@ -3,6 +3,8 @@ select * from emp A cross join dept B;
 select ename, dname from emp A cross join dept B;　#產生A+B個欄位、A*B筆紀錄
 select deptno from emp A cross join dept B;　#ambiguous，表格或欄位宜加上別稱
 
+--------------------------------------------------------------------------------
+
 #內部連結: 與順序無關
 select ename, empno, dname, loc from emp join dept;　#需加上條件on/using，否則預設交叉連結
 select ename, empno, dname, loc from emp join dept using(deptno);
@@ -24,9 +26,13 @@ select ename, dname, sal from emp, dept where emp.deptno=dept.deptno and empno=7
 select dname, sum(sal) from emp join dept using(deptno) group by dname;　#搭配group by分組
 select dname, sum(sal) from emp join dept using(deptno) group by dname having sum(sal)>10000;　#搭配group by+having
 
+--------------------------------------------------------------------------------
+
 #外部連結
 select dept.deptno, dname, empno, ename from dept left outer join emp using(deptno);　#以dept為主，列出所有配對項
 select dept.deptno, dname, empno, ename from emp left outer join dept using(deptno);　#少一筆資料: deptno=40
+
+--------------------------------------------------------------------------------
 
 #自我連結: 屬於內部連結
 select a.empno, a.ename, b.empno, b.ename from emp a join emp b on(a.mgr=b.empno);　#欄位不會是共用條件，無on寫法
