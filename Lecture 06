@@ -4,6 +4,8 @@ select count(job) from emp where deptno=20;　#欄位不為空值之資料筆數
 select count(distinct job) from emp where deptno=20;　#非空值且不重複之資料筆數
 select max(sal), min(sal), sum(sal), avg(sal) from emp where deptno=30;　#均忽略null value
 
+--------------------------------------------------------------------------------
+
 #資料分組
 select deptno, sum(sal) from emp　#仍可彙總(全體總和)，但deptno無意義
 select [distinct] deptno, sum(sal) from emp group by deptno;　#以deptno為單位計算總和，故不必強調distinct
@@ -15,6 +17,8 @@ select deptno, job, sum(sal) from emp group by 1, 2;　#階層分群: deptno(1)�
 select deptno, job, sum(sal) from emp group by 1, 2 order by 1, 2 desc;　#deptno由小至大，其中job再由大而小
 select deptno, job, sum(sal) from emp group by 1, 2 having sum(sal)>3000;
 select deptno, job, sum(sal) from emp group by 1, 2 having sum(sal)<3000 order by 3 desc limit 1;　#最接近但未達3000的階層分群
+
+--------------------------------------------------------------------------------
 
 #補充: where與having比較
 select job, sum(sal) from emp where job !="clerk"　#個別剔除clerk後才依職稱分組篩選
