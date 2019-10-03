@@ -1,1 +1,4 @@
-select empno, ename, job from emp where deptno=10;
+#條件查詢(2)
+select ename, job from emp where sal>=2000;
+select ename, job from emp where job="analyst";　#字串加上引號，可用=、!=比對
+select ename, job from emp where hiredate<"1981-10-4";　#日期加上引號，適用於比較運算
