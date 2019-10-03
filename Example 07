@@ -33,7 +33,7 @@ select a.ename Employee, a.hiredate "Emp Hiredate", a.mgr Manager, b.hiredate "M
   1. from emp a join emp b on (a.mgr=b.empno) where a.hiredate<b.hiredate;
   2. from emp a, emp b where a.mgr=b.empno and a.hiredate<b.hiredate;　#自我連結: a表是員工，b表是主管
 
-Q7.8: 顯示出表頭名為: dname, loc, Number of People, Salary的資料來顯示所有部門之名稱、所在地點、員工數量及員工平均薪資 (四捨五入取到小數第二位)
+Q7.8: 顯示出表頭名為: dname, loc, Number of People, Salary的資料來顯示所有部門之名稱、所在地點、員工數量及員工平均薪資(四捨五入取到小數第二位)
 select a.dname, a.loc, count([distinct] b.empno) "Number of People", round(avg(b.sal), 2) Salary
   from dept a left join emp b using(deptno)
   group by deptno;　#以dname或deptno都行，外部連結以dept(部門)為主
