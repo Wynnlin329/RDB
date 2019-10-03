@@ -12,6 +12,8 @@ select empno as EMP_NUMBER from emp;
 select empno "員工編號" from emp;
 select empno "emp number#" from emp;
 
+--------------------------------------------------------------------------------
+
 #設定條件
 select job from emp;　#出現14筆資料之job
 select distinct job from emp;　#只出現不重複值
