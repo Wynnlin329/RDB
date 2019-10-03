@@ -1,46 +1,46 @@
-10.1
+Q10.1: 利用下列資料來新建DEPARTMENT資料表
 create table DEPARTMENT
   (id numeric(7) not null, name varchar(24) not null);
 
-10.2
+Q10.2: 利用DEPT資料表中的資料，將資料新增至DEPTARTMENT資料表中(只新增相對的資料欄)
 insert into department
   select deptno, dname from dept;
 #詳見p.162。直接select，無需as+子查詢或set、values等
 
-10.3
+Q10.3: 利用下列資料來新建EMPLOYEE資料表
 create table EMPLOYEE
   (id numeric(7) not null, last_name varchar(24) not null, first_name varchar(24), dept_id numeric(7));
 
-10.4
+Q10.4: 將EMPLOYEE資料表中last_name欄位的資料型態更改為varchar(40)
 alter table EMPLOYEE
-  modify [column] last_name varchar(40); #修改資料型態不可用 alter 或 change
+  modify [column] last_name varchar(40); #修改資料型態不可用alter或change
 
-10.5
+Q10.5: 使用EMP資料表的結構中之EMPNO, ENAME, DEPTNO之定義來新建EMPLOYEE2資料表，並將欄位名稱設定為ID, LAST_NAME及DEPT_ID
 create table EMPLOYEE2 as
   (select empno ID, ename LAST_NAME, deptno DEPT_ID from emp);
-truncate table EMPLOYEE2;
-#方式均同view。子查詢較like彈性：指定欄位、別名(也可於外指定)，惟無primary key，且會複製資料
+#方式均同view。子查詢較like彈性: 指定欄位、別名(也可於外指定)，惟無primary key且會複製資料
+truncate table EMPLOYEE2;　#保留表格結構，但刪除複製資料
 
-10.6
+Q10.6: 刪除整個EMPLOYEE資料表
 drop table EMPLOYEE;
 
-10.7
+Q10.7: 將EMPLOYEE2資料表改名為EMPLOYEE
 alter table EMPLOYEE2
   rename [to] EMPLOYEE;
 
-10.8
+Q10.8: 將EMPLOYEE資料表中的LAST_NAME欄位刪除
 alter table EMPLOYEE
-  drop [colunm] LAST_NAME;　#別名雖寫在子查詢，但table已以別名儲存；此與view不同(參考11.3)
+  drop [colunm] LAST_NAME;　#別名雖寫在子查詢，但table已以別名儲存；此與view不同(參考Q11.3)
 
-10.9
+Q10.9: 修改EMPLOYEE資料表，新增一個欄位SALARY資料型態為NUMERIC, precision 7
 alter table EMPLOYEE
   add [column] SALARY numeric(7);
 
-10.10
+Q10.10: 修改EMPLOYEE資料表，使用ID欄位新增一個Primary key的限制條件(constraint)，並為它命名
 alter table EMPLOYEE
   add [constraint NAME] primary key(ID);　#constraint及命名可省略，但PK、UNI後必宣告變數
 
-10.11
+Q10.11: 在EMPLOYEE資料表新增一個外來鍵，以確保員工不會被分派到一個不存在的部門
 alter table EMPLOYEE
-  add [constraint NAME] foreign key(DEPT_ID) references dept(deptno);　#constraint及命名可省略，但FK後必宣告參數及參照表(欄)
+  add [constraint NAME] foreign key(DEPT_ID) references dept(deptno);　#constraint及命名可省略，但FK後必宣告變數及參照表(欄位)
 #相依性或空值設定: on [delete/update] [cascade/set null]
