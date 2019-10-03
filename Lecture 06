@@ -6,4 +6,22 @@ select max(sal), min(sal), sum(sal), avg(sal) from emp where deptno=30;　#均�
 
 #資料分組
 select deptno, sum(sal) from emp　#仍可彙總(全體總和)，但deptno無意義
-selece deptno, sum(sal) from emp group by deptno;　#以deptno為單位計算總和
+select [distinct] deptno, sum(sal) from emp group by deptno;　#以deptno為單位計算總和，故不必強調distinct
+select [distinct] comm, count(*) from emp group by comm;　#想成count(*)之筆數被分組平攤
+select [distinct] comm, count(comm) from emp group by comm;　#同上，null value不會出現
+
+#進階分組彙總
+select deptno, job, sum(sal) from emp group by 1, 2;　#階層分群: deptno(1)相同者再細分job(2)
+select deptno, job, sum(sal) from emp group by 1, 2 order by 1, 2 desc;　#deptno由小至大，其中job再由大而小
+select deptno, job, sum(sal) from emp group by 1, 2 having sum(sal)>3000;
+select deptno, job, sum(sal) from emp group by 1, 2 having sum(sal)<3000 order by 3 desc limit 1;　#最接近但未達3000的階層分群
+
+#補充: where與having比較
+select job, sum(sal) from emp where job !="clerk"　#個別剔除clerk後才依職稱分組篩選
+  group by job having sum(sal)>5000 order by 2;　
+select job, sum(sal) from emp　#依職稱分組後，直接於篩選中剔除clerk(組別)
+  group by job having sum(sal)>5000 and job !="clerk" order by 2;
+  
+#補充: group_concat
+select deptno, group_concat(job) from emp group by deptno;　#以deptno分組寫入job之值，預設逗號分隔
+select deptno, group_concat(distinct job separator "|") from emp group by deptno;　#組內不重複寫值(自動排序)，加上separator
