@@ -1,0 +1,40 @@
+Q7.1: 顯示所有員工之姓名、所屬部門編號、部門名稱及部門所在地點
+select a.ename, a.deptno, b.dname, b.loc
+  from emp a join dept b using (deptno);
+
+Q7.2: 顯示所有有賺取佣金的員工之姓名、佣金金額、部門名稱及部門所在地點
+select a.ename, a.comm, b.dname, b.loc
+  1. from emp a join dept b using (deptno) where comm>0;
+  2. from emp a, dept b where a.deptno=b.deptno and comm>0;　#join也可一起寫在where條件中
+
+Q7.3: 顯示姓名中包含有A的員工之姓名及部門名稱
+select a.ename, b.dname 
+  1. from emp a join dept b using (deptno) where ename like "%A%";
+  2. from emp a, dept b where a.deptno=b.deptno and ename like "%A%";
+
+Q7.4: 顯示所有在DALLAS工作的員工之姓名、職稱、部門編號及部門名稱
+select a.ename, a.job, b.deptno, b.dname
+  1. from emp a join dept b using (deptno) where loc="DALLAS";
+  2. from emp a, dept b where a.deptno=b.deptno and loc="DALLAS";
+
+Q7.5: 顯示出表頭名為: Employee, Emp#, Manager, Mgr#，分別表示所有員工之姓名、員工編號、主管姓名、主管之員工編號
+select a.ename Employee, a.empno "Emp#", a.mgr Manager, b.empno "Mgr#"
+  1. from emp a join emp b on (a.mgr=b.empno);
+  2. from emp a, emp b where (a.mgr=b.empno);
+
+Q7.6: 顯示出SALGRADE資料表的結構，並建立一查詢顯示所有員工之姓名、職稱、部門名稱、薪資及薪資等級
+desc salgrade;
+select a.ename, a.job, b.dname, a.sal, c.grade
+  from emp a join dept b on (a.deptno=b.deptno)
+  join salgrade c on (a.sal between c.losal and c.hisal);　#各表列出順序無關，重點在join之條件宣告
+
+Q7.7: 顯示出表頭名為: Employee, Emp Hiredate, Manager, Mgr Hiredate的資料項，顯示所有比自己主管還早進公司之員工姓名、進公司日期和主管姓名及進公司日期
+select a.ename Employee, a.hiredate "Emp Hiredate", a.mgr Manager, b.hiredate "Mgr Hiredate"
+  1. from emp a join emp b on (a.mgr=b.empno) where a.hiredate<b.hiredate;
+  2. from emp a, emp b where a.mgr=b.empno and a.hiredate<b.hiredate;　#自我連結: a表是員工，b表是主管
+
+Q7.8: 顯示出表頭名為: dname, loc, Number of People, Salary的資料來顯示所有部門之名稱、所在地點、員工數量及員工平均薪資 (四捨五入取到小數第二位)
+select a.dname, a.loc, count([distinct] b.empno) "Number of People", round(avg(b.sal), 2) Salary
+  from dept a left join emp b using(deptno)
+  group by deptno;　#以dname或deptno都行，外部連結以dept(部門)為主
+  
