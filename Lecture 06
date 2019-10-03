@@ -1,0 +1,9 @@
+#群組(彙總)函數
+select count(*) from emp where deptno=10;　#整份資料筆數
+select count(job) from emp where deptno=20;　#欄位不為空值之資料筆數
+select count(distinct job) from emp where deptno=20;　#非空值且不重複之資料筆數
+select max(sal), min(sal), sum(sal), avg(sal) from emp where deptno=30;　#均忽略null value
+
+#資料分組
+select deptno, sum(sal) from emp　#仍可彙總(全體總和)，但deptno無意義
+selece deptno, sum(sal) from emp group by deptno;　#以deptno為單位計算總和
