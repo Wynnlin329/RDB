@@ -1,33 +1,32 @@
-11.1
+Q11.1: 使用EMP資料表中的員工編號(empno)、姓名(ename)及部門編號(deptno)來建立一個EMP_VU view，並將姓名欄位改成EMPLOYEE
 create view EMP_VU as
   select ename EMPLOYEE, ename, deptno from emp;
 
-11.2
+Q11.2: 顯示EMP_VU view中的資料內容
 select * from EMP_VU;
 
-11.3
-select EMPLOYEE, deptno from EMP_VU;　#基底表格為emp，故改成ename一樣查得到
+Q11.3: 使用EMP_VU view來顯示所有員工之姓名及部門編號
+select EMPLOYEE, deptno from EMP_VU;　#基底表格為emp，改成ename一樣查得到
 (=select ename, deptno from EMP_VU;)
-#但若於create宣告EMPLOYEE欄名，這就不行
+#但若於create宣告EMPLOYEE欄名儲存，這樣就無法
 
-11.4
+Q11.4: 新建一個名為DEPT20的view，包含在部門20的所有員工之編號、姓名及部門編號。將View中的資料項目命名為EMPLOYEE_ID, EMPLOYEE, DEPARTMENT_ID
 create view DEPT20 as
   select empno EMPLOYEE_ID, ename EMPLOYEE, deptno DEPARTMENT_ID from emp
-  where deptno=20 with check option;
+  where deptno=20 with check option;　#設定不允許使用者透過DEPT20更改員工所屬的部門編號
 
-11.5
+Q11.5: 顯示DEPT20 view的欄位定義(資料結構)及其所有資料內容
 desc DEPT20;
 select * from DEPT20;
 
-11.6
+Q11.6: 試試看利用DEPT20 view將Smith轉調到部門30
 update DEPT20
   set DEPARTMENT_ID=30
   where EMPLOYEE="Smith";
 #ERROR 1369 (HY000): CHECK OPTION failed 'mydb.dept20'
 
-11.7
-create view SALARY2_VU as
+Q11.7: 新建一個名為SALARY_VU的view，包含員工之姓名、部門名稱、薪資和薪資等級。將View中的資料項目分別命名為Employee, Department, Salary, Grade
+create view SALARY_VU as
   select a.ename EMPLOYEE, a.deptno DEPARTMENT, a.sal SALARY, b.grade
-  1. from emp a, salgrade b where a.sal between b.losal and b.hisal;
+  1. from emp a, salgrade b where a.sal between b.losal and b.hisal;　#where寫法亦可，只是將between條件由數字設為欄位
   2. from emp a join salgrade b on a.sal between b.losal and b.hisal;
- 
