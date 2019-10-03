@@ -1,0 +1,33 @@
+#交叉連結
+select * from emp A cross join dept B;
+select ename, dname from emp A cross join dept B;　#產生A+B個欄位、A*B筆紀錄
+select deptno from emp A cross join dept B;　#ambiguous，表格或欄位宜加上別稱
+
+#內部連結: 與順序無關
+select ename, empno, dname, loc from emp join dept;　#需加上條件on/using，否則預設交叉連結
+select ename, empno, dname, loc from emp join dept using(deptno);
+select ename, empno, dname, loc from emp A join dept B on(A.deptno=B.deptno);
+select ename, empno, dname, loc from emp A, dept B where A.deptno=B.deptno;　#on, where寫法均可，但需宣及表格名稱
+select ename, empno, sal, grade from emp A join salgrade B on(A.sal between B.losal and B.hisal);
+select ename, empno, sal, grade from emp A, salgrade B where A.sal between B.losal and B.hisal;　#不相等的連結條件
+
+#多資料表連結
+select name, custid, ordid, itemid from customer join ord using(custid) join item using(ordid);
+select name, A.custid, B.ordid, itemid
+  from customer A join ord B on(A.custid=B.custid) join item C on(B.ordid=C.ordid);　#join順序不影響
+select name, A.custid, B.ordid, itemid
+  from customer A, ord B, item C where A.custid=B.custid and B.ordid=C.ordid;　#傳統where寫法
+
+#進階內部連結
+select ename, dname, sal from emp join dept using(deptno) where empno=7844;
+select ename, dname, sal from emp, dept where emp.deptno=dept.deptno and empno=7844;　#搭配where篩選
+select dname, sum(sal) from emp join dept using(deptno) group by dname;　#搭配group by分組
+select dname, sum(sal) from emp join dept using(deptno) group by dname having sum(sal)>10000;　#搭配group by+having
+
+#外部連結
+select dept.deptno, dname, empno, ename from dept left outer join emp using(deptno);　#以dept為主，列出所有配對項
+select dept.deptno, dname, empno, ename from emp left outer join dept using(deptno);　#少一筆資料: deptno=40
+
+#自我連結: 屬於內部連結
+select a.empno, a.ename, b.empno, b.ename from emp a join emp b on(a.mgr=b.empno);　#欄位不會是共用條件，無on寫法
+select a.empno, a.ename, b.empno, b.ename from emp a, emp b where a.mgr=b.empno;　#都會少一筆資料: mgr=null(老闆)
