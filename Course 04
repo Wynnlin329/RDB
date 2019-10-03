@@ -1,4 +1,36 @@
-#條件查詢(2)
+#條件查詢
 select ename, job from emp where sal>=2000;
 select ename, job from emp where job="analyst";　#字串加上引號，可用=、!=比對
 select ename, job from emp where hiredate<"1981-10-4";　#日期加上引號，適用於比較運算
+
+#結合邏輯運算
+select ename, job from emp where sal>=1000 and job="clerk";
+select ename, job from emp where hiredate<"1981-10-4" or job="analyst";
+select ename, job from emp where not(sal>2000 or job="manager");　#NOT碰到帶有null之資料欄位，易出狀況
+select ename, job from emp where job="manager" or job="salesman" and sal<1500;
+select ename, job from emp where (job="manager" or job="salesman") and sal<1500;　#順序: ()>not>and>or
+
+#其他特定運算
+select ename, job from emp where hiredate between "1981-2-15" and "1981-6-15";
+select ename, job from emp where ename between "A" and "E";　#運用首字進行比對
+select ename, job from emp where sal in(1000, 2000);　#只含這兩個數字
+select ename, job from emp where ename in("A", "E");　#Empty set，會完整做比對
+select ename, job from emp where ename like "_C%";　#名字第二個字母為C
+select ename, job from emp where ename like "%A%E%";　#名字包含A和E，但A在E之前面
+select ename, job from emp where mgr is not null;　#(null=null): null
+
+#case運算
+select ename, job,　#逗號沒寫: ERROR
+  case job　                               case　#以case開頭,end結尾
+  when "president" then sal*2              when sal between 0 and 1500 then "A"
+  when "manager" then sal*1.5              when sal between 1501 and 3000 then "B"
+  else sal　                               else "C"　#sal沒寫: 其餘值為null
+  end sal　          　　　　　　　　　　　  end sal　#sal沒寫: 欄位名稱為整串
+  from emp;　　　　　　　　　　　　　　　　　 from emp;
+
+#資料排序
+select ename, job from emp where sal>2200 order by ename [asc];　#依序首字母升冪排序
+select ename, job from emp where sal>2200 order by hiredate desc;　#不在select之欄位亦可用以排序
+select ename, job from emp where sal>2200 order by sal desc, 1;　#多(階層)排序條件，數字代表select欄
+select ename, job from emp where deptno=10 order by sal desc limit 5;　#10部門中最高薪資第1~5名
+select ename, job from emp where deptno=20 order by sal limit 5, 5;　#20部門中最低薪資第6~10名
