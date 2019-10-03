@@ -1,40 +1,40 @@
-9.1
+Q9.1: 將下列之資料新增至MY_EMP資料表中，不要列舉欄位
 insert into my_emp
   values(1, "Patel", "Ralph", "rpatel", 795);
 
-9.2
+Q9.2: 使用列舉欄位方式，將下列之資料新增至MY_EMP資料表中
 desc my_emp;
 insert into my_emp(ID, LAST_NAME, FIRST_NAME, USERID, SALARY)
   values(2, "Dancs", "Betty", "bdancs", 860);
 
-9.3
+Q9.3: 將下列之資料新增至MY_EMP資料表中
 insert into my_emp
   values(3, "Biri", "Ben", "bbiri", 1100), (4, "Newman", "Chad", "cnewman", 750);
 
-9.4
+Q9.4: 將員工編號為3的名字(last name)更改為Drexler
 update my_emp
   set LAST_NAME="Drexler" where ID=3;
 
-9.5
+Q9.5: 將薪資低於900元的所有員工薪資調整為1000元
 update my_emp
   set SALARY=1000 where SALARY<900;
 
-9.6
-show table status [from mydb] like "my_emp";　#資料筆數、最後修改時間...
+Q9.6: 確認你所做的資料更新已更改到資料庫中
+show table status [from mydb] like "my_emp";　#顯示資料筆數、最後修改時間...
 
-9.7
+Q9.7: 刪除Betty Dancs的資料
 delete from my_emp
   where FIRST_NAME="Betty";
 
-9.8
+Q9.8: 請依下列指令啟動一個資料庫交易:
 set autocommit=0;　#安全交易開始
 
 update my_emp
-  set salary=salary*1.1;　#未宣告where則為全數調整
-  savepoint T1;　#不以數字開頭
+  set salary=salary*1.1;　#將所有員工之薪資調升10%
+  savepoint T1;　#設定一個交易儲存點(不以數字開頭)
 
-delete from my_emp;　#不同於select，無星號
-select * from my_emp;
-rollback to savepoint T1;　#rollback取消所有交易內容
+delete from my_emp;　#刪除所有MY_EMP資料表中的資料(注意: 無星號)
+select * from my_emp;　#確認資料已被你刪光了
+rollback to savepoint T1;　#放棄刪除資料的動作(rollback: 取消所有交易)
 
 set autocommit=1;　#安全交易結束
