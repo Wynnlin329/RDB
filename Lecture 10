@@ -27,8 +27,16 @@ create table dept(deptno samllint(4), dname varchar(14)
   
 --------------------------------------------------------------------------------  
 
+#資料表維護
+alter table EMP10 add [column] mgr smallint(6);
+alter table EMP10 add [column] hiredate date first/after ename;　#指定欄位位置
+alter table EMP10 add [column](mgr smallint(6), hiredate date);
+alter table EMP10 drop [column] empno, mgr;
 
-alter table dept rename [to] department;
-alter table dept engine=myisam;
+alter table EMP10 alter [column] comm drop/set default 0;　#alter用於預設值設定
+alter table EMP10 modify [column] comm int(11) not null after sal;　#modify用於修改欄位型態、順序
+alter table EMP10 change [column] comm COMMISSION int(11);　#change用於修改欄位定義(包含型態、順序) 
+alter table EMP10 rename [to] EMPLOYEE10;
+alter table EMP10ne=myisam;
 truncate table dept;　#刪除資料，保留結構
 drop table dept;
