@@ -1,0 +1,34 @@
+#新建資料表
+create table dept(deptno smallint(4), dname varchar(14));
+create table [if not exists] dept(deptno smallint(4), dname varchar(14));　#若存在則不新建
+create table [if not exists] dept(deptno smallint(4), dname varchar(14)) engine=innodb;
+
+create table EMP10 like emp;　#無法篩選欄位、指定名稱，保留結構(PRI、not null)而不新增資料
+create table EMP10 as select * from emp;　#可以篩選欄位、指定名稱，保留結構(not null)新增資料
+create table EMP10 as select empno "EMP#", ename EMPLOYEE from emp where deptno=10;
+
+#欄位檢查條件
+create table dept(deptno smallint(4) not null, dname varchar(14) default "None");　#dname若為空，則自動填入None
+create table dept(deptno smallint(4) auto_increment, dname varchar(14));　#欄位自動編號(需為數值型態)
+create table dept(deptno smallint(4) auto_increment, dname varchar(14)) auto_increment=100;　#通常與PRI或UNI搭配使用
+
+--------------------------------------------------------------------------------
+
+#KEY constraint
+create table dept(deptno smallint(4) primary key, dname varchar(14));　#僅一組、不重複且不為null
+create table dept(deptno smallint(4) primary key, dname varchar(14) unique);　#可多組、不重複且可為null
+
+create table dept(deptno samllint(4), dname varchar(14)
+  [constraint PRI] primary key(deptno, dname));
+  [constraint UNI] unique(deptno, dname));
+  [constraint FRK] foreign key(deptno) references emp(deptno));　#constraint+取名可省略，但需宣告參照變數
+  [constraint FRK] foreign key(deptno) references emp(deptno) on delete/update cascade);　#刪除、修改時相依影響
+  [constraint FRK] foreign key(deptno) references emp(deptno) on delete/update set null);　#刪除、修改時設為空值
+  
+--------------------------------------------------------------------------------  
+
+
+alter table dept rename [to] department;
+alter table dept engine=myisam;
+truncate table dept;　#刪除資料，保留結構
+drop table dept;
