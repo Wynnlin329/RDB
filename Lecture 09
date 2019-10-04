@@ -1,0 +1,43 @@
+#DML資料處理
+insert into dept values(50, "shippment", "los angeles");
+insert into dept(deptno, dname) values(60, "advertisement");　#欄位不帶引號，未宣告欄位顯示null(不可違反預設)
+insert into dept(deptno, dname, loc) values(70, "service", "san francisco");　#values與欄位宣告數量需符
+update dept set loc="Hawaii" where deptno=60;
+update dept set dname="ADVERTISEMENT", loc="HAWAII" where deptno>60;　#修改多筆資料的相同[一或多個]欄位
+delete from dept;　#無條件便為全部刪除(注意: 無星號)
+delete from dept where deptno in(50, 60);
+
+--------------------------------------------------------------------------------
+
+#DML結合子查詢
+insert into bonus select * from emp;　#複製整組查詢結果
+insert into bonus select * from emp where empno=7844;　#複製單筆資料
+insert into bonus(empno, ename, deptno)　#bonus之欄位名(帶括號)
+  select empno, ename, deptno from emp where empno=7900;　#emp之欄位名(不帶括號)
+update emp set deptno=(select deptno from dept where loc="dallas") where empno=7499;　#取值子查詢: 注意兩表不得相同
+update emp set sal=sal+400 where deptno=(select deptno from dept where dname="accounting");　#共用欄位勢必得出現在條件中
+delete from emp where deptno in(select deptno from dept where dname like "%e%");
+
+--------------------------------------------------------------------------------
+
+#常見DML錯誤
+insert into dept(dname, loc) values("marketing", "florida");　#deptno: not null
+insert into dept(deptno, dname) values(40, "marketing");　#deptno: dulpicate PRI key
+update emp set deptno=75 where deptno=30;　#FK未定義，連結表不可自創
+delete dept where deptno=30;　#FK已定義，被連結表不可刪除
+delete emp where empno=7839;　#自我連結: a.mgr=b.empno，僅未出現於mgr者才可刪除
+
+--------------------------------------------------------------------------------
+
+#交易控制: innodb支援
+(alter table dept engine=innodb;)
+start transaction;                                 set autocommit=0;　#預設為1(自動確認)
+  delete from dept where deptno=40;                  delete from dept where deptno=40;
+rollback;　#單次交易，以commit/rollback確認變化      set autocommit=1
+set autocommit=0;
+  dml_statement...; savepoint S1;
+  dml_statement...; savepoint S2;
+  dml_statement...; savepoint S3;
+  ...
+  rollback to S3; rollback to S2; rollback to S1; rollback;　#已回復狀態，無法向後復原(如從S2復原S3)
+set autocommit=1
