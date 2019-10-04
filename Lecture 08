@@ -1,0 +1,10 @@
+#自主子查詢: 單欄位
+select empno, ename, deptno from emp where
+  sal>(select sal from emp where empno=7566);　#單欄位、單筆紀錄
+  sal>=(select avg(sal) from emp);　#使用彙總函數
+  deptno=(select deptno from emp where ename="martin");
+  
+  
+  
+select empno, ename, deptno from emp where empno in
+  (select [distinct] mgr from emp);　#單欄位、多筆紀錄: 使用in集合(distinct可省略)
