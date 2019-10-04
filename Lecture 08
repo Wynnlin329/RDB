@@ -1,10 +1,22 @@
-#自主子查詢: 單欄位
+#自主子查詢
 select empno, ename, deptno from emp where
-  sal>(select sal from emp where empno=7566);　#單欄位、單筆紀錄
-  sal>=(select avg(sal) from emp);　#使用彙總函數
-  deptno=(select deptno from emp where ename="martin");
+  job=(select job from emp where empno=7499) and
+  sal<=(select avg(sal) from emp);　#多條件子查詢+彙總函數
   
+select empno, ename, deptno from emp where
+  empno in(select [distinct] mgr from emp);　#in集合接收多筆紀錄(distinct可省略)
+  empno not in (select [distinct] mgr from emp where mgr is not null);
+  sal<any/>all(select sal from emp where job="clerk");　#相當於<max(sal), >max(sal)
+  sal>any/<all(select sal from emp where job="clerk");　#相當於>min(sal), <min(sal)
   
+--------------------------------------------------------------------------------
   
-select empno, ename, deptno from emp where empno in
-  (select [distinct] mgr from emp);　#單欄位、多筆紀錄: 使用in集合(distinct可省略)
+#相關子查詢: 無法獨立執行
+select custid, ordid, orderdate from ord A where
+  orderdate=(select max(orderdate) from ord B where A.custid=B.custid);　#針對個別custid有相應之max(orderdate)
+select ename, sal, deptno from emp A where
+  sal=(select max(sal) from ord B where A.deptno=B.deptno);　#針對個別deptno有相應之max(sal)，使用等號而非in: 具分組意義
+
+#存在性測試
+select custid, name from customer A where
+  [not] exists(select * from ord B where A.custid=B.custid);　#針對個別custid輸出: exists TRUE=not exists FALSE(曾下過訂單者)
