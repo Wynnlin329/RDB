@@ -45,13 +45,20 @@ select hiredate, extract(day from hiredate), dayofmonth(hiredate), dayofyear(hir
 (註: 無of之函數由0、有of之函數由1起算；帶name之函數呈現名稱)
 
 #日期、時間函數: 計算類
+select datediff(curdate(), "2019-9-15");　#前減後
+select adddate(curdate(), interval 10 day), subdate(curdate(), interval 10 day);　
+select addtime/timestamp(curtime(), "10:00"), subtime/timediff(curtime(), "10:00");　#只差在curtime與timestamp格式
+select date(191004), makedate(2019,300), maketime(23,15,20);　#makedate(year, dayofyear)
 
+--------------------------------------------------------------------------------
 
+#格式化輸出
+select date_format(curdate(), "%W, the %D of %M, %Y");　#Friday, the 4th of October, 2019
+select date_format(curdate(), "%a, %e/%c/%y");　#Fri, 4/10/19
+select date_format(curtime(), "%H:%i:%S"), date_format(curtime(), "%h:%i:%S %p");　#23:24:14, 11:26:56 PM(等同於"%r")
 
-
-
-
-
-
-
-
+#其他通用函數
+select convert(1-2, unsigned), convert(convert(1-2, unsigned), signed);　#無號數之轉換: 二進位轉十進位
+select user(), version(), database(), connection_id(), charset("lynn.915");　#查看系統資訊
+select ename, if(ifnull(comm,0)>0, "A","B") from emp;　#ifnull: 判斷null與前者，輸出後者
+select ename, nullif(sal, 3000) from emp;　#nullif: 判斷括號前、後者，輸出null
