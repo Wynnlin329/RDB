@@ -1,1 +1,35 @@
+#新增、查詢view
+create view emp10
+  as select * from emp where deptno=10;　#遵照基底表格之欄位名稱
+create view emp20(employee_no, employee, annual_sal)　#宣告表頭>欄位別名>欄位名稱
+  as select empno, ename NAME, sal*12 from emp where deptno=10;
+create view deptsum
+  as select dname, max(sal)-min(sal), avg(sal)
+  from emp join dept using(deptno) group by dname;　#使用join及彙總函數，為複雜view: 不可更新
+select count(*), sum(annual_sal) SUM from emp20;
 
+--------------------------------------------------------------------------------
+
+#view DML
+insert into emp20(empno, NAME) values(8000, "Anita");　#annnual_sal欄值為null
+insert into emp20(empno, NAME, sal*12) values(8000, "Anita", 26000);　#error: 計算/彙總欄位，該欄無法新增
+update emp10 set salary=2000 where empno=7369;
+update emp20 set employee="Irene" where empno=7566;　#view為虛擬表，使用別名或原欄位名均可
+update emp20 set sal*12=60000 where NAME="jones";　#error: 計算/彙總欄位，該欄無法更動
+delete from emp20 where employee_no=8000;
+delete from emp20 where ename="king";　#error: 違反外來鍵(king為自我連結之mgr FK內容)
+delete from deptsum where dname="accounting";　#error: 計算/彙總欄位，整表無法刪除
+
+--------------------------------------------------------------------------------
+
+#view DDL
+alter view emp20
+  as select empno "EMP#", ename EMPLOYEE, sal from emp where deptno=20;
+  as select empno, ename, sal from emp where deptno=20 with check option;　#自動檢查更新條件: where子句
+(update emp20 set deptno=10 where "EMP#"=7499;　#error: 違反檢查條件)
+drop view deptsum;
+
+#索引
+show index from emp;
+create [unique] index NONUNI on emp(deptno, job);　#[唯一]複合索引鍵
+[alter table emp] drop index NONUNI [on emp];　#索引為一物件，亦可視為表格的某一特徵(註: deptno本身為FK，逕自刪除會報錯)
